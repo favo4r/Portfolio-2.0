@@ -1,0 +1,625 @@
+/* ==========================================================================
+   responsive.css
+   Load this LAST on every page (after style.css, planner.css, project.css).
+   Everything is inside media queries, so the desktop layout (above 1300px)
+   is not changed at all.
+
+   Breakpoints
+     1300px  content gets side padding (.section had none)
+     1100px  hero buttons stop being positioned from the left 18%
+     1024px  tablet  – stacked project cards, 2-col grids
+      1000px mobile navigation (hamburger)
+       900px stack two-column blocks (contact, intro, planner...)
+       640px phone
+       400px small phones
+   ========================================================================== */
+
+
+/* ---------- 1300px and below: give content breathing room ---------- */
+@media (max-width: 1300px) {
+  body {
+    overflow-x: clip;               /* safety net, keeps sticky header working */
+  }
+
+  .section {
+    padding-inline: var(--gutter);  /* .section had max-width but no padding */
+  }
+
+  /* hero image stays full-bleed even though .section now has padding */
+  .hero-imgs {
+    margin-inline: calc(var(--gutter) * -1);
+  }
+
+  .process-grid {
+    margin-inline: var(--gutter);
+  }
+}
+
+
+/* ---------- 1100px and below ---------- */
+@media (max-width: 1100px) {
+  /* left:18% + translateX(-50%) pushed the buttons off the left edge */
+  .hero-cta {
+    left: var(--gutter);
+    transform: none;
+    flex-wrap: wrap;
+  }
+}
+
+
+/* ---------- 1000px and below: hamburger navigation ---------- */
+@media (max-width: 1000px) {
+  .header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .nav-links {
+    order: 3;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s var(--ease);
+  }
+
+  .nav-links ul {
+    flex-direction: column;
+    gap: 0;
+    padding: 0.75rem 0 0.5rem;
+  }
+
+  .nav-links ul li {
+    border-top: 1px solid var(--line);
+  }
+
+  .nav-links ul li a {
+    display: block;
+    padding: 0.9rem 0.2rem;
+  }
+
+  .header.nav-open .nav-links {
+    max-height: 24rem;
+  }
+
+  .header.nav-open {
+    border-bottom-color: var(--line);
+  }
+
+  /* push CEO card + menu button to the right, logo stays left */
+  .header > .logo,
+  .header > div.logo {
+    margin-right: auto;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.5rem;
+  }
+
+  .menu-toggle img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+
+/* ---------- 1024px and below: tablet ---------- */
+@media (max-width: 1024px) {
+
+  /* ----- home: hero ----- */
+  .hero-texts {
+    padding-top: 4rem;
+    gap: 1.5rem;
+  }
+
+  .hero-paragraph p {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .hero-imgs {
+    height: min(100svh, 720px);
+  }
+
+  /* ----- home: intro ----- */
+  .Intro-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.5rem;
+    padding-top: 4rem;
+  }
+
+  .Intro .quote {
+    margin-left: 1rem;
+  }
+
+  /* ----- home: project list (turns the 3-column hover card into a stacked card) ----- */
+  .Projects > .section > h2 {
+    font-size: clamp(3rem, 12vw, 6.5rem);
+  }
+
+  .Projects .project-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    gap: 0;
+  }
+
+  .project-card > a {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "img   img"
+      "title icon"
+      "meta  meta";
+    height: auto;
+    gap: 1rem 1rem;
+    padding: 1.5rem 0;
+  }
+
+  .project-card > a > img {
+    grid-area: img;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    justify-self: stretch;
+  }
+
+  .project-content {
+    grid-area: title;
+    height: auto;
+    padding-top: 0;
+    position: static;
+  }
+
+  .content-title {
+    position: static;
+    transform: none;
+  }
+
+  .content-title p {
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .cta {
+    display: none;          /* the whole card is already a link */
+  }
+
+  /* the details were hover-only – show them all the time on touch/tablet */
+  .project-meta {
+    display: contents;
+  }
+
+  .meta-icon {
+    grid-area: icon;
+    position: static;
+    transform: none;
+    align-self: start;
+  }
+
+  .meta-text {
+    grid-area: meta;
+    position: static;
+    opacity: 1;
+    transform: none;
+    text-align: left;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .meta-text p {
+    margin: 0;
+  }
+
+  /* ----- home: skills ----- */
+  .skill-intro {
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 4rem;
+  }
+
+  .skill-intro > h2 {
+    font-size: clamp(2.75rem, 10vw, 4.5rem);
+  }
+
+  .skill-list-wrapper .skill-list,
+  .skill-list-wrapper .skill-update {
+    width: 48%;
+  }
+
+  .service-grid {
+    padding-bottom: 4rem;
+    margin-bottom: 0;
+  }
+
+  /* ----- about ----- */
+  .about-hero {
+    padding-inline: var(--gutter);
+  }
+
+  .about-hero h1 {
+    font-size: clamp(2.75rem, 11vw, 5rem);
+    line-height: 1;
+  }
+
+  .education,
+  .certicate {
+    padding-inline: var(--gutter);
+  }
+
+  /* ----- projects page ----- */
+  .page-hero {
+    padding-inline: var(--gutter);
+  }
+
+  .projects {
+    padding-inline: var(--gutter);
+  }
+
+  .projects .project-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* index.html's card styles (350px fixed height, 600px image) also hit these cards */
+  .projects .project-card > a {
+    display: block;
+    height: auto;
+    padding: 0;
+  }
+
+  .projects .project-card > a > img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .projects .project-card > a > img[src=""] {
+    display: none;
+  }
+
+  /* ----- planner ----- */
+  .planner-title {
+    margin-left: var(--gutter);
+  }
+}
+
+
+/* ---------- 900px and below: stack two-column blocks ---------- */
+@media (max-width: 900px) {
+
+  /* contact block (home, about, projects, contact pages) */
+  .contact {
+    flex-direction: column;
+    margin: 0 auto;
+    padding-inline: var(--gutter);
+  }
+
+  .col {
+    margin-left: 0;
+    padding: 2rem 0;
+  }
+
+  .col-title h2 {
+    font-size: clamp(2.5rem, 10vw, 4.5rem);
+  }
+
+  .copy {
+    margin-top: 1.5rem;
+  }
+
+  .contact-details {
+    margin-top: 1.5rem;
+    padding-top: 0;
+  }
+
+  .headline {
+    padding-top: 0;
+    margin-bottom: 0;
+    font-size: clamp(1.25rem, 4vw, 1.625rem);
+  }
+
+  form {
+    margin-top: 1.5rem;
+  }
+
+  .detail-row .text-group a {
+    font-size: clamp(1rem, 3.6vw, 1.25rem);
+    overflow-wrap: anywhere;
+  }
+
+  /* about: 3 process cards, 5 education cards, 7 certificates */
+  .process-grid,
+  .education-grid,
+  .certificate-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* avoid a lonely half-width card at the end of the grid */
+  .process-card:last-child:nth-child(odd),
+  .education-grid > div:last-child:nth-child(odd),
+  .certificate-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  /* projects page hero */
+  .page-hero .hero-text {
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  /* planner: stack the form and the list */
+  .planner-section {
+    flex-direction: column;
+    padding-inline: var(--gutter);
+  }
+
+  .planner-card {
+    width: 100%;
+    padding-inline: 0;
+  }
+
+  /* home: hero text */
+  .hero-texts {
+    flex-direction: column;
+  }
+
+  .hero-paragraph p br {
+    display: none;           /* forced line breaks look broken on narrow screens */
+  }
+
+  .hero-paragraph p {
+    max-width: 60ch;
+  }
+}
+
+
+/* ---------- 640px and below: phones ---------- */
+@media (max-width: 640px) {
+
+  /* the faint column lines behind the page get in the way of text */
+  main {
+    background-image: none;
+  }
+
+  /* header: logo + compact CEO card + menu button on ONE row */
+  .logo {
+    width: 5.5rem;
+  }
+
+  .ceo-card-details {
+    display: none;
+  }
+
+  .ceo-card-btn {
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.5rem 0.2rem 0.2rem;
+  }
+
+  .ceo-img {
+    width: 2.25rem;
+    height: 2.25rem;
+    object-fit: cover;
+  }
+
+  .ceo-card-btn .icon {
+    margin-left: 0;
+    width: 1rem;
+  }
+
+  /* home: hero */
+  .hero-texts {
+    padding-top: 2.5rem;
+  }
+
+  .hero-imgs {
+    height: min(75svh, 560px);
+    min-height: 380px;
+  }
+
+  .hero-cta {
+    right: var(--gutter);
+    flex-direction: column;
+    gap: 0.75rem;
+    bottom: 1rem;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* home: intro */
+  .Intro-card {
+    padding-top: 3rem;
+  }
+
+  .Intro p {
+    font-size: 1.2rem;
+    margin: 0;
+    max-width: none;
+  }
+
+  .Intro .quote {
+    margin-left: 0;
+  }
+
+  .Intro .quote blockquote {
+    max-width: none;
+  }
+
+  .intro-stat {
+    margin: 2rem 0 0;
+    gap: 1.5rem 2.5rem;
+  }
+
+  .intro-stat .stat-no {
+    font-size: 1.9rem;
+  }
+
+  /* home: projects */
+  .Projects .project-grid {
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .meta-text {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  /* home: skills */
+  .skill-intro > p {
+    font-size: 1.1rem;
+  }
+
+  .skill-list-wrapper {
+    padding-top: 2rem;
+    gap: 1.5rem;
+  }
+
+  .skill-list-wrapper .skill-list,
+  .skill-list-wrapper .skill-update {
+    width: 100%;
+  }
+
+  .service-card {
+    min-height: 96px;
+    gap: 0.75rem;
+  }
+
+  .service-card img {
+    margin-left: 0;
+    flex-shrink: 0;
+  }
+
+  .service-card h3 {
+    font-size: 1.25rem;
+    flex: 1;
+    margin: 0;
+  }
+
+  .service-card a {
+    font-size: 1.75rem;
+    margin-right: 0.25rem;
+  }
+
+  /* about */
+  .process-grid,
+  .education-grid,
+  .certificate-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .process-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .education-grid > div {
+    min-height: 0;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .education h2,
+  .certicate h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .certicate .sub-sect {
+    max-width: none;
+  }
+
+  main > section:first-of-type > p {
+    font-size: 15px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* projects page */
+  .page-hero {
+    padding-top: 2rem;
+  }
+
+  .page-hero h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-hero .hero-stats > div:first-child {
+    flex-direction: row;
+  }
+
+  .page-hero .stat {
+    padding: 1rem 0.75rem 1rem 0;
+  }
+
+  .page-hero .stat span:last-child {
+    font-size: 1.75rem;
+  }
+
+  .page-hero .hero-text h3 {
+    font-size: 1.25rem;
+  }
+
+  .projects .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-filter {
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-filter button {
+    padding: 0.6rem 1rem;
+  }
+
+  /* forms: 16px stops iOS Safari zooming into the field */
+  .field input,
+  .field textarea,
+  .field .planner-input,
+  .field .planner-select {
+    font-size: 16px;
+  }
+
+  .field .planner-select {
+    min-width: 0;
+  }
+
+  /* planner */
+  .planner-title {
+    font-size: clamp(2.25rem, 10vw, 3rem);
+    padding-top: 2rem;
+  }
+
+  .task-item {
+    padding: 0.75rem;
+  }
+
+  /* footer */
+  .footer-content {
+    gap: 1rem;
+  }
+}
+
+
+/* ---------- 400px and below: small phones ---------- */
+@media (max-width: 400px) {
+  .logo {
+    width: 4.75rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 18vw, 4.5rem);
+  }
+
+  .contact .btn,
+  .contact-cta .btn-primary {
+    white-space: normal;
+  }
+}
