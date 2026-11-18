@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Planner</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/planner.css">
+  
+    <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="logo">
+      <img src="assets/images/favor.png" alt="Logo">
+    </div>
+    <nav class="nav-links" id="site-nav">
+            <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="planner.html">Planner</a></li>
+      </ul>
+    </nav>
+    <div>
+            <a href="contact.html" class="ceo-card-btn">
+                <img class="ceo-img" src="assets/images/quote-img.jpeg" alt="CEO Image">
+                <div class="ceo-card-details">
+                    <h6>Meet The CEO</h6>
+                    <p>Favour Okeke</p>
+                    <span>CEO</span>
+                </div>
+                <div>
+                    <img src="assets/icons/arrow-up-right-white.svg" alt="" class="icon">
+                </div>
+            </a>
+        </div>
+      <button type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+            <img src="assets/icons/hamburger-menu-svgrepo-com (1).svg" alt="">
+        </button>
+    </header>
+
+  <main>
+    <h1 class="planner-title">Academic Planner</h1>
+    <section class="planner-section">
+      <div class="planner-card">
+        <div class="field">
+          <label class="planner-label" for="taskName">Task name*</label>
+          <input class="planner-input" id="taskName" placeholder="e.g. Submit COS 106 Portfolio">
+        </div>
+        <div class="field">
+          <label class="planner-label" for="taskCourse">Course*</label>
+          <select class="planner-select" id="taskCourse">
+            <option value="">Select course</option>
+            <option>Problem Solving</option>
+            <option>Nigerian People and Culture</option>
+            <option>Elementary Mathematics II – Calculus</option>
+            <option>General Physics II – Electricity & Magnetism</option>
+            <option>General Practical Physics II</option>
+            <option>Introduction to Web Technologies</option>
+            <option>Communication in English II</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="planner-label" for="taskDate">Due date*</label>
+          <input class="planner-input" type="date" id="taskDate">
+        </div>
+        <button class="btn-add" id="addBtn">Add Task</button>
+      </div>
+    
+      <div class="planner-card">
+        <h2>All Created Task</h2>
+        <ul id="taskList"></ul>
+        <p id="emptyMsg" class="empty">No tasks yet. Add one above.</p>
+      </div>
+    </section>
+    
+  </main>
+  <footer class="footer">
+        <div class="footer-content">
+          <img class="footer-logo" src="assets/images/Favor_logo.png" alt="">   
+          <div class="footer-links">
+            <a href=""><img src="assets/icons/link-2.svg" alt=""></a>
+            <a href="#">Legal</a>
+            <a href="#">Privacy Policy</a>
+          </div>   
+        </div>
+    </footer>
+
+  <script>
+    // COS 106 – Academic Planner
+    let tasks = JSON.parse(localStorage.getItem('miva_tasks_michelle') || '[]');
+
+    const nameInput = document.getElementById('taskName');
+    const courseInput = document.getElementById('taskCourse');
+    const dateInput = document.getElementById('taskDate');
+    const listEl = document.getElementById('taskList');
+    const emptyMsg = document.getElementById('emptyMsg');
+
+    document.getElementById('addBtn').onclick = addTask;
+
+    function save() { localStorage.setItem('miva_tasks_michelle', JSON.stringify(tasks)); }
+
+    function addTask() {
+      const name = nameInput.value.trim();
+      const course = courseInput.value;
+      const date = dateInput.value;
+      if (!name) { alert('Please enter a task name'); return; }
+      tasks.push({ id: Date.now(), name, course, date, done: false });
+      nameInput.value = ''; courseInput.value = ''; dateInput.value = '';
+      save(); render();
+    }
+
+    function toggleComplete(id) {
+      const t = tasks.find(t => t.id === id);
+      if (t) { t.done = !t.done; save(); render(); }
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      save(); render();
+    }
+
+    function render() {
+      listEl.innerHTML = '';
+      emptyMsg.style.display = tasks.length ? 'none' : 'block';
+      tasks.forEach(t => {
+        const li = document.createElement('li');
+        li.className = 'task-item' + (t.done ? ' complete' : '');
+        li.innerHTML = `
+      <div class="task-info">
+        <div class="task-name">${t.name}</div>
+        <div class="task-meta">
+          ${t.course ? `<span class="tag">${t.course}</span>` : ''}
+          ${t.date ? 'Due: ' + t.date : 'No due date'}
+        </div>
+      <button class="icon-btn" onclick="toggleComplete(${t.id})" title="Mark complete"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big-icon lucide-circle-check-big"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg></button>
+      <button class="icon-btn" onclick="deleteTask(${t.id})" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+    `;
+        listEl.appendChild(li);
+      });
+    }
+
+    if (tasks.length === 0) {
+      tasks = [
+        { id: 1, name: 'Submit COS 106 Portfolio Website', course: 'Introduction to Web Technologies', date: '', done: false },
+        { id: 2, name: 'Read Calculus notes Ch.3', course: 'Elementary Mathematics II – Calculus', date: '', done: false }
+      ];
+      save();
+    }
+    render();
+  </script>
+    <script src="assets/java/nav.js"></script>
+</body>
+
+</html>
